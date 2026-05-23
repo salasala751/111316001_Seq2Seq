@@ -142,7 +142,7 @@
         }
 
         .reporter-byline .author {
-            color: var(--gold-light);
+            color: var(--text-muted);
             font-weight: 600;
         }
 
@@ -319,14 +319,14 @@
 <body>
 
     <nav class="navbar">
-        <div class="nav-logo">Bella & Digital Learning</div>
+        <div class="nav-logo">Seq2Seq Learning Report</div>
         <ul class="nav-links">
             <li><a href="#intro">演算法介紹</a></li>
             <li><a href="#record">學習紀錄</a></li>
             <li><a href="#verify">查證與修正</a></li>
             <li><a href="#visual">視覺化說明</a></li>
             <li><a href="#case">應用案例</a></li>
-            <li><a href="#reflect">獨立反思</a></li>
+            <li><a href="#reflect">學習反思</a></li>
         </ul>
     </nav>
 
@@ -494,47 +494,47 @@
 
     <section id="visual" class="container">
         <h2>視覺化說明</h2>
-        <p>下圖為我根據 Seq2Seq 在自動音樂記譜任務中的資料流，利用網頁原生 CSS 架構所繪製的模型概念與響應式資料流向圖（支援多端螢幕自適應閱讀）：</p>
+        <p>下圖為 Sequence-to-Sequence (Seq2Seq) 演算法的通用模型架構與響應式資料流向圖。此架構核心在於處理非等長的輸入與輸出序列：</p>
         
         <div class="process-chain">
             
             <div class="process-node">
                 <div class="node-title">Input</div>
-                <p class="node-desc">時頻譜圖序列<br>(Spectrogram)</p>
+                <p class="node-desc">源序列<br>(Source Sequence)</p>
             </div>
             
             <div class="process-arrow">→</div>
             
             <div class="process-node">
                 <div class="node-title">Encoder</div>
-                <p class="node-desc">編碼器神經網路<br>(特徵提煉)</p>
+                <p class="node-desc">編碼器神經網路<br>(讀取並提煉特徵)</p>
             </div>
             
             <div class="process-arrow">→</div>
             
             <div class="process-node highlight-node">
                 <div class="node-title" style="color: #ffffff; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Context Vector</div>
-                <p class="node-desc">核心內文向量<br>(語意語境凝聚)</p>
+                <p class="node-desc">內文向量 / 隱藏狀態<br>(凝聚完整序列語意)</p>
             </div>
             
             <div class="process-arrow">→</div>
             
             <div class="process-node">
                 <div class="node-title">Decoder</div>
-                <p class="node-desc">解碼器神經網路<br>(序列翻譯)</p>
+                <p class="node-desc">解碼器神經網路<br>(逐步解碼預測)</p>
             </div>
             
             <div class="process-arrow">→</div>
             
             <div class="process-node">
                 <div class="node-title">Output</div>
-                <p class="node-desc">MIDI / 音符事件<br>(樂譜渲染)</p>
+                <p class="node-desc">目標序列<br>(Target Sequence)</p>
             </div>
             
         </div>
         
         <p style="margin-top: 35px;">
-            這張原生排版圖直觀地呈現了音樂訊號從左側「時頻譜圖序列」輸入，經過編碼器提取時序特徵、濃縮為 Context Vector 後，再由右側解碼器依序吐出「音符起始與結束」符號序列的完整生命週期。透過網頁原生的彈性佈局（Flexbox），此架構在行動端觀看時會自動轉化為垂直流向，確保文字閱讀的絕對清晰度與版面高級感。
+            在通用的 Seq2Seq 架構中，資料流遵循「輸入 $\rightarrow$ 壓縮 $\rightarrow$ 解碼 $\rightarrow$ 輸出」的本質。<strong>Encoder（編碼器）</strong>負責將不定長的輸入源序列轉換為一個固定維度的 <strong>Context Vector（內文向量）</strong>，此向量如同知識的結晶，封存了整個輸入序列的語意資訊；隨後，<strong>Decoder（解碼器）</strong>再以此向量為基礎，逐步生成出全新的目標序列。這種機制使其能完美應用於機器翻譯、文字摘要、語音辨識等各種複雜的序列轉換任務。
         </p>
     </section>
 
