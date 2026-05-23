@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seq2Seq 演算法個人化學習成果報告</title>
+    <title>111316001人工智慧導論期末報告</title>
     <style>
         /* CSS 變數：Bella 雜誌人文低奢風（降低對比、溫潤優雅） */
         :root {
@@ -331,50 +331,50 @@
     </nav>
 
     <header class="hero">
-        <h1>Seq2Seq 演算法個人化學習報告</h1>
-        <p>運用生成式 AI 協同探索深度學習架構及其在自動音樂記譜的實踐</p>
+        <h1>Seq2Seq 演算法探究與 AI 輔助學習報告</h1>
+        <p>運用 AI 工具協同探索深度學習架構及其在自動音樂記譜的實踐</p>
         
         <div class="reporter-byline">
-            <div>文／<span class="author">闕文郁 (Yu)</span></div>
+            <div>作者／<span class="author">闕文郁 (Yu)</span></div>
             <div>學號／<span>111316001</span></div>
-            <div>課程／<span>深度學習與應用</span></div>
+            <div>課程／<span>人工智慧導論</span></div>
         </div>
     </header>
 
     <section id="intro" class="container">
         <h2>演算法介紹</h2>
         <p>
-            Sequence-to-Sequence (Seq2Seq) 是一種專門用來處理「序列到序列」轉換任務的深度學習模型。傳統的神經網路通常要求輸入和輸出的維度（長度）必須固定，但在現實的自然語言或音訊處理中，輸入和輸出的長度往往是不對等的。Seq2Seq 演算法最大的貢獻，就是突破了長度限制的瓶頸。
+            Sequence-to-Sequence (Seq2Seq) 是一種用來處理「序列到序列」轉換的深度學習模型。傳統的神經網路通常要求輸入和輸出的維度長度固定，但在現實的自然語言或音訊處理中，輸入和輸出的長度往往不等長。Seq2Seq 演算法最大的貢獻，就是突破了長度限制的瓶頸。
         </p>
         <div style="margin-top: 25px;">
             <h3>主要解決的問題</h3>
             <p>
-                它主要解決了「輸入序列與輸出序列長度不一致且無法對齊」的問題。例如機器翻譯（中文句子的字數與英文單字數不同）、文字摘要（長文變短句），以及連續語音訊號轉成文字或符號等任務。
+                它主要解決了「輸入序列與輸出序列長度不一致且無法對齊」的問題。例如機器翻譯時，中文句子的字數與英文單字數不同、文字摘要十，長文變短句，以及連續語音訊號轉成文字或符號等工作。
             </p>
         </div>
         <div style="margin-top: 25px;">
             <h3>基本運作流程與常見應用</h3>
             <p>
-                其基本流程包含兩大核心：首先由編碼器（Encoder）將輸入序列壓縮成一個高維度的內文向量（Context Vector），再由解碼器（Decoder）負責將該向量「解碼」並逐步預測生成新的目標序列。常見的應用場景包括 Google 翻譯、Siri 語音辨識、文章大意自動摘要，以及智慧客服對話系統等。
+                首先由編碼器（Encoder）將輸入序列壓縮成一個高維度的內文向量（Context Vector），再由解碼器（Decoder）負責將該向量「解碼」並逐步預測生成新的目標序列。常見的應用場景包括 Google 翻譯、Siri 語音辨識、文章大意自動摘要，以及智慧客服對話系統等。
             </p>
         </div>
     </section>
 
     <section id="record" class="container">
         <h2>AI 補助學習紀錄</h2>
-        <p>在本研究中，我利用 AI 作為對話導師進行協同學習。以下為我與 AI 互動的關鍵對話摘要，卡片採用一明一暗的色調以增強互動對比感：</p>
+        <p>在本報告中，我使用 Gemini 協同學習理解，以下是我與 Gemini 的對話摘要，記錄學習過程：</p>
         
         <div class="ai-record-container">
             <div class="ai-pair">
                 <div class="user-prompt-card">
                     <div class="card-label">我的提問 01</div>
-                    <p><strong>「我想要學習 Seq2Seq 演算法，請為我介紹其核心架構。」</strong></p>
+                    <p><strong>「我想要學習Seq2Seq 演算法，請為我介紹。」</strong></p>
                 </div>
                 <div class="ai-response-card">
                     <div class="card-label">AI 回答重點與我的理解</div>
-                    <p><strong>AI 重點：</strong> 說明了 Encoder-Decoder 架構，並用「口譯員」的隱喻解釋 Context Vector 就像口譯員腦海中形成的整體概念。</p>
+                    <p><strong>AI 重點：</strong> 說明 Encoder-Decoder 架構，並用「口譯員」的隱喻解釋 Context Vector 就像口譯員腦海中形成的整體概念。</p>
                     <p style="color: var(--gold-light); font-size: 0.9rem; margin-top: 10px;">
-                        💡 <strong>內化心得：</strong> 這個隱喻讓我一瞬間抓到了原本抽象的向量意義，不再只看到數學矩陣，而是理解到它代表的是高度濃縮的語意特徵。
+                        💡 <strong>我的理解：</strong> Seq2Seq 演算法會透過編碼器讀取資料，壓縮成內文向量，再交由解碼器翻譯出新的序列。
                     </p>
                 </div>
             </div>
@@ -382,13 +382,13 @@
             <div class="ai-pair">
                 <div class="user-prompt-card">
                     <div class="card-label">我的提問 02</div>
-                    <p><strong>「既然語音辨識可以把聲音轉文字，那類似 Shazam 這種聽音辨曲的程式，也是透過 Seq2Seq 解決嗎？」</strong></p>
+                    <p><strong>「既然語音辨識可以把聲音轉文字，聽音辨曲的程式可以透過seq2seq解決嗎？」</strong></p>
                 </div>
                 <div class="ai-response-card">
                     <div class="card-label">AI 回答重點與我的理解</div>
-                    <p><strong>AI 重點：</strong> 分辨了兩者任務本質的不同。Shazam 是利用「音訊指紋技術」在資料庫進行高效雜湊比對；而 Seq2Seq 則適合用於「自動音樂記譜（將音訊轉成音符序列）」。</p>
+                    <p><strong>AI 重點：</strong> 像Shazam 這種分辨環境中歌曲的程式是利用「音訊指紋技術」在資料庫進行高效雜湊比對；而 Seq2Seq 則適合用於「自動音樂記譜」，將音訊轉成音符序列。</p>
                     <p style="color: var(--gold-light); font-size: 0.9rem; margin-top: 10px;">
-                        💡 <strong>內化心得：</strong> 這幫我劃清了技術的界線。讓我明白不能盲目把深度學習硬套在所有問題上，必須根據任務的輸出是否為「變長序列」來做正確的演算法選型。
+                        💡 <strong>我的理解：</strong> 原來要根據工作項目的輸出是否為「變長序列」來做正確的演算法選型，以達到最佳效果。
                     </p>
                 </div>
             </div>
@@ -405,13 +405,13 @@
             
             <h3>確認與查證說明</h3>
             <p>
-                經查閱相關文獻與技術論壇（例如搜尋 "Seq2Seq bottleneck problem" 與經典論文 <i>Neural Machine Translation by Jointly Learning to Align and Translate</i>），證實了 AI 的說法正確。在傳統的 Seq2Seq 中，不論輸入多長，Encoder 最終都只能輸出一個固定維度的 Context Vector。這在數學上確實會造成極大的資訊壓縮失真，模型往往只能記得序列尾端的訊息，這在學術界被正式定義為<strong>資訊瓶頸問題</strong>。
+                經過搜尋發現有一篇論文提到了相關問題（<i>Neural Machine Translation by Jointly Learning to Align and Translate</i>），證實了 AI 的說法正確。在傳統的 Seq2Seq 中，不論輸入多長，Encoder 最終都只能輸出一個固定維度的 Context Vector。會造成極大的資訊壓縮失真，模型只能記得序列尾端的訊息，在學術界被正式定義為<strong>資訊瓶頸問題</strong>。
             </p>
             
-            <h3>修正前後比較</h3>
+            <h3>查證後的認知修正</h3>
             <p>
-                <strong>修正前：</strong> 原本以為 Seq2Seq 既然能處理不定長序列，丟多長的資料進去都沒問題。<br>
-                <strong>修正後：</strong> 查證後修正了我的認知，了解到傳統 Seq2Seq 在長序列上的致命缺陷，並進一步得知後續發展出的「注意力機制（Attention Mechanism）」是如何打破這個固定長度瓶頸（讓 Decoder 可以主動回溯 Encoder 的所有狀態），這讓我的技術認知變得更完整、更立體。
+                <strong>查證前：</strong> AI 沒有詳細說明資訊瓶頸的緣由，我也沒有想到是否會有資料長度的限制。<br>
+                <strong>查證後：</strong> 我了解到傳統 Seq2Seq 在長序列上的缺陷，並進一步得知後續發展出的「注意力機制（Attention Mechanism）」可以讓 Decoder 可以主動回溯 Encoder 的所有狀態，打破固定長度的限制。
             </p>
         </div>
     </section>
@@ -540,7 +540,7 @@
 
     <section id="case" class="container">
         <h2>應用案例：自動音樂記譜 (AMT)</h2>
-        <p>為了深入說明此演算法的應用，我選擇了<strong>自動音樂記譜（Automatic Music Transcription）</strong>作為具體實踐的情境。其完整技術流程如下：</p>
+        <p>我選擇<strong>自動音樂記譜（Automatic Music Transcription）</strong>作為說明此演算法應用的情境。其完整技術流程如下：</p>
         
         <div class="flow-step">
             <h3>Step 1. 聲音訊號預處理</h3>
@@ -572,22 +572,21 @@
     </section>
 
     <section id="reflect" class="container">
-        <h2>獨立反思</h2>
+        <h2>學習反思</h2>
         
-        <h3>AI 對我學習的具體幫助</h3>
+        <h3>AI 對本次學習的幫助</h3>
         <p>
-            在這次研究 Seq2Seq 的過程中，AI 對我最大的幫助在於**克服了「知識冷啟動」的障礙**。以往面對完全陌生的深度學習演算法，若直接去讀充斥著數學公式與程式碼的學術論文，往往容易失焦、耗費大量文獻檢索時間。而 AI 能在極短時間內提供整理好的結構化資訊，並用生活化的隱喻（如口譯員）幫我迅速建立宏觀的觀念模型，大幅提升了學習的效率。
+            在這次學習 Seq2Seq 的過程中，AI 對我最大的幫助在於提供淺顯易懂的說明，迅速整理好結構化資訊，並用生活化的隱喻（如口譯員）幫我建立大概念，大幅提升了學習的效率。
         </p>
 
-        <h3>AI 回答的限制與盲區</h3>
+        <h3>AI 回答的限制</h3>
         <p>
-            然而，我也深切體會到 AI 存在著**「被動回應所帶來的知識盲區」**。AI 的本質是「問什麼，答什麼」，它不會主動指出我思維中未曾料想到的層面。如果我過於依賴 AI 給的第一個漂亮答案，停留在舒適圈內，我就永遠不會主動發現傳統 Seq2Seq 的資訊瓶頸，或是它在處理「複音音樂（樂團多樂器合奏）」時的重大限制。這種缺乏挑釁與反思的餵養式學習，容易讓人產生「自己已經完全精通」的錯覺。
+            在學習過程中，我認為「問什麼，答什麼」是 AI 最大的局限。AI 不會主動指出我沒想到的層面的部份，過度依賴可能陷入被動回應所帶來的知識盲區，容易讓人產生「自己已經完全了解」的錯覺，而停止思考。
         </p>
 
-        <h3>我最後真正學會了什麼？</h3>
+        <h3>反思</h3>
         <p>
-            這份報告讓我明白，在 AI 普及的時代，**主導學習深度的從來就不是 AI 的資料庫有多大，而是提問者（我）的觸角延伸得有多深**。我真正學會的不僅僅是 Seq2Seq架構本身，更學會了如何在使用 AI 工具後，刻意進行「二次查證」與「反向質疑」。一個好的學習者必須學會主動挑戰 AI、查證其缺陷，才能將工具提供的熱門資訊，真正內化為自己獨立思考後的知識。
-        </p>
+            俗話說：「學而不思則罔」，AI 確實是一個很便利的學習工具，但也更考驗提問者的觸角伸得有多深，如何能役物而不役於物。在這次報告製作過程中，我認識了Seq2Seq 的架構，也意識到在使用 AI 工具後可以多方查證與提問來鞏固知識。
     </section>
 
     <footer>
