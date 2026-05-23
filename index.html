@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seq2Seq 演算法個人化學習成果報告</title>
+    <style>
+        /* CSS 變數：Bella 雜誌人文低奢風（降低對比、溫潤優雅） */
+        :root {
+            --bg-main: #16191f;          /* 煙燻深灰，降低純黑的刺眼感 */
+            --bg-sub: #1e222b;           /* 稍微亮一點的碳黑（區塊背景） */
+            --text-main: #e2e5e9;        /* 柔和米白，降低對比度 */
+            --text-muted: #88929e;       /* 灰霧藍（次要文字） */
+            --gold-light: #dfba73;       /* 溫潤香檳金 */
+            --gold-gradient: linear-gradient(135deg, #dfba73 0%, #b89347 100%);
+            --border-color: #262b36;     /* 內斂細邊框 */
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            
+            /* 字體設定：標題引入 Bella 風格的 Georgia 經典襯線體 */
+            /* 請在 :root 裡面替換成這兩行 */
+            --font-title: "Georgia", "Times New Roman", "LiSong Pro", "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "LiSong Pro", "Noto Serif TC", "Songti TC", "PMingLiU", sans-serif;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-family: var(--font-body);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.8;
+            letter-spacing: 0.5px; /* 微調字距，營造雜誌排版感 */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            padding-top: 70px;
+        }
+
+        /* 導覽列 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: rgba(22, 25, 31, 0.88);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10%;
+        }
+
+        .nav-logo {
+            font-family: var(--font-title);
+            font-style: italic; /* 模仿時尚雜誌的斜體 Logo 感 */
+            font-size: 1.1rem;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            position: relative;
+            padding: 8px 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold-light);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--gold-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* 主視覺區：Bella 時尚雜誌署名風格 */
+        .hero {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 100px 20px 40px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero h1 {
+            font-family: var(--font-title); /* 套用 Bella 標題字體 */
+            font-size: 2.3rem;
+            font-weight: 400; /* 襯線體略細更有氣質 */
+            color: #ffffff;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        /* 經典雜誌 Byline */
+        .reporter-byline {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+            display: flex;
+            gap: 20px;
+            letter-spacing: 1px;
+        }
+
+        .reporter-byline .author {
+            color: var(--gold-light);
+            font-weight: 600;
+        }
+
+        /* 內容區塊 */
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        section {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        h2 {
+            font-family: var(--font-title); /* 區塊大標套用優雅字體 */
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #ffffff;
+            margin-bottom: 35px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h2::before {
+            content: '';
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            background: var(--gold-gradient);
+            border-radius: 50%;
+        }
+
+        h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        p {
+            margin-bottom: 25px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+
+        /* 低奢暗色卡片 */
+        .card {
+            background-color: var(--bg-sub);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        /* 區塊 2：AI 紀錄 - 互動明暗對話框設計 */
+        .ai-record-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .ai-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* 我的提問：採用深暗色（一暗），呈現退居幕後的內斂 */
+        .user-prompt-card {
+            background-color: #11141a; 
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 22px;
+        }
+
+        /* AI 回答：採用微亮且帶有絲滑灰金質感的色調（一明），突出回答的重點 */
+        .ai-response-card {
+            background-color: #222733; 
+            border: 1px solid #2d3444;
+            border-radius: 6px;
+            padding: 22px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .card-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .user-prompt-card .card-label { color: var(--text-muted); }
+        .ai-response-card .card-label { color: var(--gold-light); }
+
+        /* 區塊 3：查證與修正盒 */
+        .verification-box {
+            background-color: var(--bg-sub);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 28px;
+            box-shadow: var(--card-shadow);
+        }
+
+        /* 區塊 4：視覺化說明 */
+        .image-container {
+            text-align: center;
+            margin: 35px 0;
+            padding: 25px;
+            background-color: #11141a;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            opacity: 0.85;
+            transition: opacity 0.3s;
+        }
+        .image-container img:hover {
+            opacity: 1;
+        }
+
+        .image-caption {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 12px;
+            font-family: var(--font-title);
+            font-style: italic;
+        }
+
+        /* 區塊 5：應用案例 */
+        .flow-step {
+            margin-bottom: 30px;
+            padding-left: 20px;
+            border-left: 1px solid var(--border-color);
+            transition: border-color 0.3s;
+        }
+        .flow-step:hover {
+            border-left-color: var(--gold-light);
+        }
+
+        /* 頁尾 */
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            background-color: #11141a;
+            border-top: 1px solid var(--border-color);
+            letter-spacing: 0.8px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 0 5%; }
+            .ai-pair { grid-template-columns: 1fr; gap: 15px; }
+            .nav-links li { margin-left: 15px; }
+            .nav-links a { font-size: 0.75rem; }
+            .hero h1 { font-size: 1.8rem; }
+            .reporter-byline { flex-direction: column; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-logo">Bella & Digital Learning</div>
+        <ul class="nav-links">
+            <li><a href="#intro">演算法介紹</a></li>
+            <li><a href="#record">學習紀錄</a></li>
+            <li><a href="#verify">查證與修正</a></li>
+            <li><a href="#visual">視覺化說明</a></li>
+            <li><a href="#case">應用案例</a></li>
+            <li><a href="#reflect">獨立反思</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <h1>Seq2Seq 演算法個人化學習報告</h1>
+        <p>運用生成式 AI 協同探索深度學習架構及其在自動音樂記譜的實踐</p>
+        
+        <div class="reporter-byline">
+            <div>文／<span class="author">闕文郁 (Yu)</span></div>
+            <div>學號／<span>111316001</span></div>
+            <div>課程／<span>深度學習與應用</span></div>
+        </div>
+    </header>
+
+    <section id="intro" class="container">
+        <h2>演算法介紹</h2>
+        <p>
+            Sequence-to-Sequence (Seq2Seq) 是一種專門用來處理「序列到序列」轉換任務的深度學習模型。傳統的神經網路通常要求輸入和輸出的維度（長度）必須固定，但在現實的自然語言或音訊處理中，輸入和輸出的長度往往是不對等的。Seq2Seq 演算法最大的貢獻，就是突破了長度限制的瓶頸。
+        </p>
+        <div style="margin-top: 25px;">
+            <h3>主要解決的問題</h3>
+            <p>
+                它主要解決了「輸入序列與輸出序列長度不一致且無法對齊」的問題。例如機器翻譯（中文句子的字數與英文單字數不同）、文字摘要（長文變短句），以及連續語音訊號轉成文字或符號等任務。
+            </p>
+        </div>
+        <div style="margin-top: 25px;">
+            <h3>基本運作流程與常見應用</h3>
+            <p>
+                其基本流程包含兩大核心：首先由編碼器（Encoder）將輸入序列壓縮成一個高維度的內文向量（Context Vector），再由解碼器（Decoder）負責將該向量「解碼」並逐步預測生成新的目標序列。常見的應用場景包括 Google 翻譯、Siri 語音辨識、文章大意自動摘要，以及智慧客服對話系統等。
+            </p>
+        </div>
+    </section>
+
+    <section id="record" class="container">
+        <h2>AI 補助學習紀錄</h2>
+        <p>在本研究中，我利用 AI 作為對話導師進行協同學習。以下為我與 AI 互動的關鍵對話摘要，卡片採用一明一暗的色調以增強互動對比感：</p>
+        
+        <div class="ai-record-container">
+            <div class="ai-pair">
+                <div class="user-prompt-card">
+                    <div class="card-label">我的提問 01</div>
+                    <p><strong>「我想要學習 Seq2Seq 演算法，請為我介紹其核心架構。」</strong></p>
+                </div>
+                <div class="ai-response-card">
+                    <div class="card-label">AI 回答重點與我的理解</div>
+                    <p><strong>AI 重點：</strong> 說明了 Encoder-Decoder 架構，並用「口譯員」的隱喻解釋 Context Vector 就像口譯員腦海中形成的整體概念。</p>
+                    <p style="color: var(--gold-light); font-size: 0.9rem; margin-top: 10px;">
+                        💡 <strong>內化心得：</strong> 這個隱喻讓我一瞬間抓到了原本抽象的向量意義，不再只看到數學矩陣，而是理解到它代表的是高度濃縮的語意特徵。
+                    </p>
+                </div>
+            </div>
+
+            <div class="ai-pair">
+                <div class="user-prompt-card">
+                    <div class="card-label">我的提問 02</div>
+                    <p><strong>「既然語音辨識可以把聲音轉文字，那類似 Shazam 這種聽音辨曲的程式，也是透過 Seq2Seq 解決嗎？」</strong></p>
+                </div>
+                <div class="ai-response-card">
+                    <div class="card-label">AI 回答重點與我的理解</div>
+                    <p><strong>AI 重點：</strong> 分辨了兩者任務本質的不同。Shazam 是利用「音訊指紋技術」在資料庫進行高效雜湊比對；而 Seq2Seq 則適合用於「自動音樂記譜（將音訊轉成音符序列）」。</p>
+                    <p style="color: var(--gold-light); font-size: 0.9rem; margin-top: 10px;">
+                        💡 <strong>內化心得：</strong> 這幫我劃清了技術的界線。讓我明白不能盲目把深度學習硬套在所有問題上，必須根據任務的輸出是否為「變長序列」來做正確的演算法選型。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="verify" class="container">
+        <h2>查證與修正</h2>
+        <div class="verification-box">
+            <h3 style="color: var(--gold-light);">選擇查證的 AI 回答重點</h3>
+            <p><i>「傳統 Seq2Seq 存在資訊瓶頸（Information Bottleneck），導致長文字或長音訊的細節嚴重遺失。」</i></p>
+            
+            <div style="border-top: 1px solid var(--border-color); margin: 20px 0;"></div>
+            
+            <h3>確認與查證說明</h3>
+            <p>
+                經查閱相關文獻與技術論壇（例如搜尋 "Seq2Seq bottleneck problem" 與經典論文 <i>Neural Machine Translation by Jointly Learning to Align and Translate</i>），證實了 AI 的說法正確。在傳統的 Seq2Seq 中，不論輸入多長，Encoder 最終都只能輸出一個固定維度的 Context Vector。這在數學上確實會造成極大的資訊壓縮失真，模型往往只能記得序列尾端的訊息，這在學術界被正式定義為<strong>資訊瓶頸問題</strong>。
+            </p>
+            
+            <h3>修正前後比較</h3>
+            <p>
+                <strong>修正前：</strong> 原本以為 Seq2Seq 既然能處理不定長序列，丟多長的資料進去都沒問題。<br>
+                <strong>修正後：</strong> 查證後修正了我的認知，了解到傳統 Seq2Seq 在長序列上的致命缺陷，並進一步得知後續發展出的「注意力機制（Attention Mechanism）」是如何打破這個固定長度瓶頸（讓 Decoder 可以主動回溯 Encoder 的所有狀態），這讓我的技術認知變得更完整、更立體。
+            </p>
+        </div>
+    </section>
+
+    <style>
+        /* 視覺化專用樣式 - 雜誌感流程鏈 */
+        .process-chain {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin: 40px 0;
+            padding: 10px 0;
+        }
+
+        .process-node {
+            flex: 1;
+            background-color: var(--bg-sub);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 18px 12px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        /* 懸停時隱隱亮起香檳金邊框 */
+        .process-node:hover {
+            border-color: var(--gold-light);
+            transform: translateY(-3px);
+        }
+
+        .node-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--gold-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .node-desc {
+            font-size: 0.88rem;
+            color: var(--text-main);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* 橫向箭頭 */
+        .process-arrow {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            font-family: var(--font-title);
+            user-select: none;
+        }
+
+        /* 重點核心向量卡片稍微加強一點視覺 */
+        .process-node.highlight-node {
+            border-color: rgba(223, 186, 115, 0.4);
+            background-color: #222733;
+        }
+
+        /* 💡 響應式魔法：當螢幕寬度小於 768px (手機) 時，自動切換為垂直排列 */
+        @media (max-width: 768px) {
+            .process-chain {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .process-arrow {
+                transform: rotate(90deg); /* 箭頭轉向朝下 */
+                margin: 5px 0;
+            }
+            .process-node {
+                width: 100%;
+                padding: 20px;
+            }
+        }
+    </style>
+
+    <section id="visual" class="container">
+        <h2>視覺化說明</h2>
+        <p>下圖為我根據 Seq2Seq 在自動音樂記譜任務中的資料流，利用網頁原生 CSS 架構所繪製的模型概念與響應式資料流向圖（支援多端螢幕自適應閱讀）：</p>
+        
+        <div class="process-chain">
+            
+            <div class="process-node">
+                <div class="node-title">Input</div>
+                <p class="node-desc">時頻譜圖序列<br>(Spectrogram)</p>
+            </div>
+            
+            <div class="process-arrow">→</div>
+            
+            <div class="process-node">
+                <div class="node-title">Encoder</div>
+                <p class="node-desc">編碼器神經網路<br>(特徵提煉)</p>
+            </div>
+            
+            <div class="process-arrow">→</div>
+            
+            <div class="process-node highlight-node">
+                <div class="node-title" style="color: #ffffff; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Context Vector</div>
+                <p class="node-desc">核心內文向量<br>(語意語境凝聚)</p>
+            </div>
+            
+            <div class="process-arrow">→</div>
+            
+            <div class="process-node">
+                <div class="node-title">Decoder</div>
+                <p class="node-desc">解碼器神經網路<br>(序列翻譯)</p>
+            </div>
+            
+            <div class="process-arrow">→</div>
+            
+            <div class="process-node">
+                <div class="node-title">Output</div>
+                <p class="node-desc">MIDI / 音符事件<br>(樂譜渲染)</p>
+            </div>
+            
+        </div>
+        
+        <p style="margin-top: 35px;">
+            這張原生排版圖直觀地呈現了音樂訊號從左側「時頻譜圖序列」輸入，經過編碼器提取時序特徵、濃縮為 Context Vector 後，再由右側解碼器依序吐出「音符起始與結束」符號序列的完整生命週期。透過網頁原生的彈性佈局（Flexbox），此架構在行動端觀看時會自動轉化為垂直流向，確保文字閱讀的絕對清晰度與版面高級感。
+        </p>
+    </section>
+
+    <section id="case" class="container">
+        <h2>應用案例：自動音樂記譜 (AMT)</h2>
+        <p>為了深入說明此演算法的應用，我選擇了<strong>自動音樂記譜（Automatic Music Transcription）</strong>作為具體實踐的情境。其完整技術流程如下：</p>
+        
+        <div class="flow-step">
+            <h3>Step 1. 聲音訊號預處理</h3>
+            <p>
+                將音樂創作者彈奏的原始聲音檔案（如 .wav），透過短時傅立葉轉換（STFT）處理，將一維的聲學波形轉換為二維的「時頻譜圖（Spectrogram）」。這步是為了讓電腦看清在不同時間點上，各個音高的能量分佈。
+            </p>
+        </div>
+
+        <div class="flow-step">
+            <h3>Step 2. Encoder 特徵提取與理解</h3>
+            <p>
+                將時頻譜圖序列一格一格輸入到 Encoder。Encoder 會捕捉旋律隨時間變化的動態特徵（如音高的起始點與音色），在讀完整段旋律後，將音樂的所有內涵凝聚成一個 Context Vector。
+            </p>
+        </div>
+
+        <div class="flow-step">
+            <h3>Step 3. Decoder 寫譜序列生成</h3>
+            <p>
+                Decoder 接收到 Context Vector 後，根據預先定義好的「音樂符號詞彙表」（包含音高、Note On/Off 等事件），開始一步步像音樂家聽寫一樣，精準預測並吐出音符序列。
+            </p>
+        </div>
+
+        <div class="flow-step">
+            <h3>Step 4. 後處理與 MIDI 樂譜輸出</h3>
+            <p>
+                模型輸出的符號序列會被後處理程式重新封裝，轉換為標準的 MIDI 數位樂譜檔案。音樂軟體讀取該檔案後，即可直接渲染出供人類閱讀的標準五線譜或簡譜。
+            </p>
+        </div>
+    </section>
+
+    <section id="reflect" class="container">
+        <h2>獨立反思</h2>
+        
+        <h3>AI 對我學習的具體幫助</h3>
+        <p>
+            在這次研究 Seq2Seq 的過程中，AI 對我最大的幫助在於**克服了「知識冷啟動」的障礙**。以往面對完全陌生的深度學習演算法，若直接去讀充斥著數學公式與程式碼的學術論文，往往容易失焦、耗費大量文獻檢索時間。而 AI 能在極短時間內提供整理好的結構化資訊，並用生活化的隱喻（如口譯員）幫我迅速建立宏觀的觀念模型，大幅提升了學習的效率。
+        </p>
+
+        <h3>AI 回答的限制與盲區</h3>
+        <p>
+            然而，我也深切體會到 AI 存在著**「被動回應所帶來的知識盲區」**。AI 的本質是「問什麼，答什麼」，它不會主動指出我思維中未曾料想到的層面。如果我過於依賴 AI 給的第一個漂亮答案，停留在舒適圈內，我就永遠不會主動發現傳統 Seq2Seq 的資訊瓶頸，或是它在處理「複音音樂（樂團多樂器合奏）」時的重大限制。這種缺乏挑釁與反思的餵養式學習，容易讓人產生「自己已經完全精通」的錯覺。
+        </p>
+
+        <h3>我最後真正學會了什麼？</h3>
+        <p>
+            這份報告讓我明白，在 AI 普及的時代，**主導學習深度的從來就不是 AI 的資料庫有多大，而是提問者（我）的觸角延伸得有多深**。我真正學會的不僅僅是 Seq2Seq架構本身，更學會了如何在使用 AI 工具後，刻意進行「二次查證」與「反向質疑」。一個好的學習者必須學會主動挑戰 AI、查證其缺陷，才能將工具提供的熱門資訊，真正內化為自己獨立思考後的知識。
+        </p>
+    </section>
+
+    <footer>
+        <p>© 2026 . 闕文郁 (Yu) . 個人化學習成果展現 . Designed in Bella Lifestyle Aesthetic</p>
+    </footer>
+
+</body>
+</html>
