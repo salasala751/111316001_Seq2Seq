@@ -119,7 +119,9 @@
             font-family: var(--font-title); /* 套用 Bella 標題字體 */
             font-size: 2.3rem;
             font-weight: 400; /* 襯線體略細更有氣質 */
-            color: #ffffff;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 15px;
             line-height: 1.3;
         }
@@ -165,7 +167,7 @@
             font-family: var(--font-title); /* 區塊大標套用優雅字體 */
             font-size: 1.5rem;
             font-weight: 400;
-            color: #ffffff;
+            color: var(--gold-light);
             margin-bottom: 35px;
             display: flex;
             align-items: center;
@@ -177,7 +179,7 @@
             display: inline-block;
             width: 5px;
             height: 5px;
-            background: var(--gold-gradient);
+            background: var(--text-main);
             border-radius: 50%;
         }
 
@@ -359,12 +361,12 @@
             </p>
             <ul>
                 <li>
-                    <strong>編碼階段 (Encoding)：</strong> 
-                    源序列（長度為 $T_x$）會被逐字、逐訊號地輸入到編碼器（Encoder）中。在每個時間點 $t$，Encoder 不僅讀取當前的輸入，還會結合前一個時間點的隱藏狀態。當序列的所有資料讀取完畢時，Encoder 最後一個時間點輸出的隱藏狀態，即為 <strong>Context Vector（內文向量）</strong>。此向量以固定的數學維度，高密度地封存了整條源序列的語意資訊。
+                    <strong>編碼階段：</strong> 
+                    源序列會被逐字、逐訊號地輸入到編碼器（Encoder）中，讀取當前的輸入，並結合前一個時間點的隱藏狀態。當序列的所有資料讀取完畢時，Encoder 最後一個時間點輸出的隱藏狀態，即為 <strong>Context Vector（內文向量）</strong>。此向量以固定的數學維度，高密度地封存了整條源序列的語意資訊。
                 </li>
                 <li>
-                    <strong>解碼階段 (Decoding)：</strong> 
-                    解碼器（Decoder）接收到 Context Vector 後，將其作為初始的隱藏狀態。系統輸入一個象徵啟始的特殊符號（ <code>&lt;SOS&gt;</code>），Decoder 會預測並輸出第一個目標字。接著在時間點 $t+1$，Decoder 將**自己在上一步（時間點 $t$）所預測出來的輸出**，當作全新的輸入餵給自己，配合內部的隱藏狀態更新，逐步、遞迴地生成下一個字，直到模型自主吐出象徵結束的特殊符號（ <code>&lt;EOS&gt;</code>）。
+                    <strong>解碼階段：</strong> 
+                    解碼器（Decoder）接收到 Context Vector 後，將其作為初始的隱藏狀態。系統輸入一個象徵啟始的特殊符號（ <code>&lt;SOS&gt;</code>），Decoder 會預測並輸出第一個目標字，而後將自己在上一步所預測出來的輸出，當作全新的輸入餵給自己，配合內部的隱藏狀態更新，遞迴地生成下一個字，直到模型自主吐出象徵結束的特殊符號（ <code>&lt;EOS&gt;</code>）。
                 </li>
             </ul>
         </div>
@@ -372,12 +374,12 @@
         <div style="margin-top: 35px;">
             <h3>常見應用場景</h3>
             <p>
-                由於其不定長序列轉換特性，Seq2Seq 成為了現代自然語言處理與多模態應用的火車頭，最經典的三大應用場景包括：
+                由於其不定長序列轉換特性，Seq2Seq 在現代自然語言處理與多模態應用領域，有幾個常見的應用。
             </p>
             <ul>
                 <li>
-                    <strong>神經機器翻譯 (Neural Machine Translation, NMT)：</strong> 
-                    輸入端接收源語言序列，輸出端則依據語意生成目標語言序列。使得翻譯結果從以往生硬的單字逐字堆砌，進化為具備人類語音邏輯與流暢度的通順語句。
+                    <strong>神經機器翻譯 (Neural Machine Translation)：</strong> 
+                    輸入端接收源語言序列，輸出端則依據語意生成目標語言序列。使得翻譯結果從生硬的單字逐字堆砌，進化為具備語音邏輯的通順語句。
                 </li>
                 <li>
                     <strong>自動文本摘要 (Text Summarization)：</strong> 
